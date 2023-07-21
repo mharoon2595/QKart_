@@ -1,17 +1,28 @@
 import { Button, CircularProgress, Stack, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
-import { useSnackbar } from "notistack";
+import { useSnackbar, SnackbarProvider } from "notistack";
 import React, { useState } from "react";
 import { config } from "../App";
 import Footer from "./Footer";
 import Header from "./Header";
 import "./Register.css";
 
+let obj;
+
 const Register = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const [userName, setUsername]=useState('');
+  const [password, setPassword]=useState('');
+  const [confirmP, setConfirmP]=useState('');
+  const [viewLoading,setViewLoading]=useState(false);
 
-
+  
+  obj={
+    'username':userName,
+    'password':password,
+    'confirmPassword':confirmP
+  };
   // TODO: CRIO_TASK_MODULE_REGISTER - Implement the register function
   /**
    * Definition for register handler
@@ -35,8 +46,41 @@ const Register = () => {
    *      "message": "Username is already taken"
    * }
    */
-  const register = async (formData) => {
-  };
+  const register = async (obj) => {
+    //console.log(viewLoading);
+      setViewLoading(true)
+       try{
+        const token=await axios.post(`${config.endpoint}/auth/register`,{
+          username: obj.username,
+          password:obj.password
+        })
+        //console.log(token);
+        setViewLoading(false);
+         enqueueSnackbar('Registered Successfully', {
+          variant: 'success'
+        })}
+        catch(error){ 
+          console.log(error.response)
+          setViewLoading(false);
+          // enqueueSnackbar(error.response.data.message,{
+          //   variant:'error'
+          // })
+          if(error.response){
+          enqueueSnackbar(error.response.data.message, {
+            variant: 'error'
+          })}
+          else{
+            enqueueSnackbar("Something went wrong. Check that the backend is running, reachable and returns valid JSON.", {
+              variant: 'error'
+            })
+          }
+        }
+      }
+        
+    
+    
+
+  
 
   // TODO: CRIO_TASK_MODULE_REGISTER - Implement user input validation logic
   /**
@@ -56,14 +100,43 @@ const Register = () => {
    * -    Check that password field is not less than 6 characters in length - "Password must be at least 6 characters"
    * -    Check that confirmPassword field has the same value as password field - Passwords do not match
    */
-  const validateInput = (data) => {
+  const validateInput = (obj) => {
+   
+    if(obj.username==''){
+      return enqueueSnackbar("Username is a required field",{
+        variant:'warning'
+      })
+    }
+    else if(obj.username.length<6){
+      return enqueueSnackbar("Username must be at least 6 characters",{
+        variant:'warning'
+      })
+    }
+    else if(obj.password==''){
+      return enqueueSnackbar("Password is a required field",{
+        variant:'warning'
+      })
+    }
+    else if(obj.password.length<6){
+      return enqueueSnackbar("Password must be at least 6 characters",{
+        variant:'warning'
+      })
+    }
+    else if(obj.password!=obj.confirmPassword){
+      return enqueueSnackbar("Passwords do not match",{
+        variant:'warning'
+      })
+    }
+   return true
   };
-
+  
+  if(viewLoading==false){
   return (
     <Box
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
+      //alignItems="flex-end"
       minHeight="100vh"
     >
       <Header hasHiddenAuthButtons />
@@ -77,6 +150,9 @@ const Register = () => {
             title="Username"
             name="username"
             placeholder="Enter Username"
+            onChange={(event) => {
+              setUsername(event.target.value);
+            }}
             fullWidth
           />
           <TextField
@@ -88,6 +164,9 @@ const Register = () => {
             helperText="Password must be atleast 6 characters length"
             fullWidth
             placeholder="Enter a password with minimum 6 characters"
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
           />
           <TextField
             id="confirmPassword"
@@ -96,10 +175,26 @@ const Register = () => {
             name="confirmPassword"
             type="password"
             fullWidth
+            onChange={(event) => {
+              setConfirmP(event.target.value);
+            }}
           />
-           <Button className="button" variant="contained">
+           
+           
+           <Button className="button" variant="contained" onClick= {async ()=>{
+            //await register(obj)
+            if(validateInput(obj)==true){
+            await register(obj)}
+            else{
+             validateInput(obj)
+            }}
+            }
+          >
             Register Now
            </Button>
+          
+           
+           
           <p className="secondary-action">
             Already have an account?{" "}
              <a className="link" href="#">
@@ -111,6 +206,76 @@ const Register = () => {
       <Footer />
     </Box>
   );
-};
+}
+
+else if(viewLoading==true){
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
+      //alignItems="flex-end"
+      minHeight="100vh"
+    >
+      <Header hasHiddenAuthButtons />
+      <Box className="content">
+        <Stack spacing={2} className="form">
+          <h2 className="title">Register</h2>
+          <TextField
+            id="username"
+            label="Username"
+            variant="outlined"
+            title="Username"
+            name="username"
+            placeholder="Enter Username"
+            onChange={(event) => {
+              setUsername(event.target.value);
+            }}
+            fullWidth
+          />
+          <TextField
+            id="password"
+            variant="outlined"
+            label="Password"
+            name="password"
+            type="password"
+            helperText="Password must be atleast 6 characters length"
+            fullWidth
+            placeholder="Enter a password with minimum 6 characters"
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
+          />
+          <TextField
+            id="confirmPassword"
+            variant="outlined"
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+            fullWidth
+            onChange={(event) => {
+              setConfirmP(event.target.value);
+            }}
+          />
+           
+           <Box sx={{ display: 'flex', justifyContent:'center' }}>
+             <CircularProgress />
+           </Box>
+           
+          
+          <p className="secondary-action">
+            Already have an account?{" "}
+             <a className="link" href="#">
+              Login here
+             </a>
+          </p>
+        </Stack>
+      </Box>
+      <Footer />
+    </Box>
+  );
+}
+}
+
 
 export default Register;
