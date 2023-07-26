@@ -7,8 +7,12 @@ import { config } from "../App";
 import Footer from "./Footer";
 import Header from "./Header";
 import "./Register.css";
+import { useHistory, Link } from "react-router-dom";
+
 
 let obj;
+let token;
+
 
 const Register = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -16,7 +20,7 @@ const Register = () => {
   const [password, setPassword]=useState('');
   const [confirmP, setConfirmP]=useState('');
   const [viewLoading,setViewLoading]=useState(false);
-
+  const history = useHistory();
   
   obj={
     'username':userName,
@@ -24,6 +28,7 @@ const Register = () => {
     'confirmPassword':confirmP
   };
   // TODO: CRIO_TASK_MODULE_REGISTER - Implement the register function
+
   /**
    * Definition for register handler
    * - Function to be called when the user clicks on the register button or submits the register form
@@ -50,11 +55,11 @@ const Register = () => {
     //console.log(viewLoading);
       setViewLoading(true)
        try{
-        const token=await axios.post(`${config.endpoint}/auth/register`,{
+          token=await axios.post(`${config.endpoint}/auth/register`,{
           username: obj.username,
           password:obj.password
         })
-        //console.log(token);
+        console.log(token.data);
         setViewLoading(false);
          enqueueSnackbar('Registered Successfully', {
           variant: 'success'
@@ -139,7 +144,7 @@ const Register = () => {
       //alignItems="flex-end"
       minHeight="100vh"
     >
-      <Header hasHiddenAuthButtons />
+      <Header hasHiddenAuthButtons={true}/>
       <Box className="content">
         <Stack spacing={2} className="form">
           <h2 className="title">Register</h2>
@@ -184,7 +189,11 @@ const Register = () => {
            <Button className="button" variant="contained" onClick= {async ()=>{
             //await register(obj)
             if(validateInput(obj)==true){
-            await register(obj)}
+            await register(obj);
+            if(token){
+              history.push("/login",{from:"Register"})
+            }
+          }
             else{
              validateInput(obj)
             }}
@@ -197,9 +206,9 @@ const Register = () => {
            
           <p className="secondary-action">
             Already have an account?{" "}
-             <a className="link" href="#">
+            <Link to="/login">
               Login here
-             </a>
+             </Link>
           </p>
         </Stack>
       </Box>
@@ -214,10 +223,9 @@ else if(viewLoading==true){
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
-      //alignItems="flex-end"
       minHeight="100vh"
     >
-      <Header hasHiddenAuthButtons />
+      <Header hasHiddenAuthButtons={true}/>
       <Box className="content">
         <Stack spacing={2} className="form">
           <h2 className="title">Register</h2>
@@ -276,6 +284,7 @@ else if(viewLoading==true){
   );
 }
 }
+
 
 
 export default Register;
