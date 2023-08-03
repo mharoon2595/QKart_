@@ -288,3 +288,4 @@ else if(viewLoading==true){
 
 
 export default Register;
+

@@ -71,15 +71,22 @@ const Login = () => {
       history.push("/",{from:"Login"})
       }
       catch(error){ 
-        //console.log(error.response.status)
+        //console.log(error.message)
         setViewLoading(false);
         // enqueueSnackbar(error.response.data.message,{
         //   variant:'error'
         // })
+      if(error.response){
         if(error.response.status>=400){
         enqueueSnackbar(error.response.data.message, {
           variant: 'error'
         })}
+       }
+       else if(error.request){
+        enqueueSnackbar("Something went wrong. Check that the backend is running, reachable and returns valid JSON.", {
+          variant: 'error'
+        })
+       }
         else{
           enqueueSnackbar("Something went wrong. Check that the backend is running, reachable and returns valid JSON.", {
             variant: 'error'
@@ -256,3 +263,4 @@ else if(viewLoading==true){
 
 
 export default Login;
+

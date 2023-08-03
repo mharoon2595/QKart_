@@ -1,18 +1,42 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { spacing } from '@mui/system';
-import { Avatar, Button, Stack } from "@mui/material";
+import { Avatar, Button, Stack, TextField, InputAdornment } from "@mui/material";
 import Box from "@mui/material/Box";
 import React from "react";
 import { useHistory, Link } from "react-router-dom";
 import "./Header.css";
+import { Search, SentimentDissatisfied } from "@mui/icons-material";
+//import {username} from "./Login";
 
-const Header = ({ children, hasHiddenAuthButtons }) => {
+const Header = ({ children, hasHiddenAuthButtons, value, onChange}) => {
   const history=useHistory();
   if(hasHiddenAuthButtons===false && localStorage.getItem('username')!==null){
     return (
       <Box className="header">
         <Box className="header-title">
             <img src="logo_light.svg" alt="QKart-icon"></img>
+        </Box>
+        <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          width:'30rem'
+          //marginX:2
+        }}>
+          <TextField className="search-desktop"  variant="outlined" id="outlined-basic" fullWidth
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Search color="primary" />
+              </InputAdornment>
+            ),
+          }}
+          placeholder="Search for items/categories"
+          name="search"
+          //value={value}
+          onChange={onChange}
+          //onChange={(event)=>{/>
+          />
         </Box>
         <Box 
         sx={{
@@ -40,12 +64,34 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
         </Box>
   )}
   
+
   else if(hasHiddenAuthButtons===false && localStorage.getItem('username')===null){
     return(
       <Box className="header"
       >
         <Box className="header-title">
             <img src="logo_light.svg" alt="QKart-icon"></img>
+        </Box>
+        <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          width:'30rem'
+          //marginX:2
+        }}>
+          <TextField className="search-desktop" id="outlined-basic" variant="outlined" fullWidth
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Search color="primary" />
+              </InputAdornment>
+            ),
+          }}
+          placeholder="Search for items/categories"
+          name="search"
+          value={value}
+          onChange={onChange}
+          />
         </Box>
         <Box 
         sx={{
