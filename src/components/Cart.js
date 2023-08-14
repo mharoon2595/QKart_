@@ -103,7 +103,7 @@ export const getTotalCartValue = (items) => {
  *
  *
  */
-const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
+const ItemQuantity = ({ value, handleAdd, handleDelete,  }) => {
   return (
     <Stack direction="row" alignItems="center">
       <IconButton size="small" color="primary" onClick={handleDelete}>
@@ -133,7 +133,7 @@ const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
  *
  *
  */
-const Cart = ({ products, items, handleQuantity,a=false }) => {
+const Cart = ({ products, items, handleQuantity,a=false, isReadOnly }) => {
   const history = useHistory();
 const token = localStorage.getItem("token")
   if (!items.length) {

@@ -8,9 +8,9 @@ import "./Header.css";
 import { Search, SentimentDissatisfied } from "@mui/icons-material";
 //import {username} from "./Login";
 
-const Header = ({ children, hasHiddenAuthButtons, value, onChange}) => {
+const Header = ({ children, hasHiddenAuthButtons, value, onChange, hideSearch}) => {
   const history=useHistory();
-  if(hasHiddenAuthButtons===false && localStorage.getItem('username')!==null){
+  if(hasHiddenAuthButtons===false && localStorage.getItem('username')!==null && hideSearch==false){
     return (
       <Box className="header">
         <Box className="header-title">
@@ -65,8 +65,8 @@ const Header = ({ children, hasHiddenAuthButtons, value, onChange}) => {
   )}
   
 
-  else if(hasHiddenAuthButtons===false && localStorage.getItem('username')===null){
-    return(
+  else if(hasHiddenAuthButtons===false && localStorage.getItem('username')===null && hideSearch==false){
+    return( 
       <Box className="header"
       >
         <Box className="header-title">
@@ -121,6 +121,40 @@ const Header = ({ children, hasHiddenAuthButtons, value, onChange}) => {
       </Box>
     )}
 
+else if(hasHiddenAuthButtons===false && hideSearch && localStorage.getItem('username')!==null){
+  return (
+    <Box className="header">
+      <Box className="header-title">
+          <img src="logo_light.svg" alt="QKart-icon"></img>
+      </Box>
+      
+      <Box 
+      sx={{
+      display: 'flex',
+      justifyContent: 'flex-end',
+      //marginX:2
+    }}
+    >
+      <Box mx={1}>
+      <img src="avatar.png" alt={localStorage.getItem('username')}></img>
+      </Box>
+      <Box mt={0.25}>
+      <p>{localStorage.getItem('username')}</p>
+      </Box>
+      <Button
+      variant="text"
+      onClick={()=>{
+        localStorage.clear();
+        window.location.reload();
+      }}
+      >
+       LOGOUT
+      </Button>
+      </Box>
+      </Box>
+  )
+}
+
  else if(hasHiddenAuthButtons===true){
   return(
        <Box className="header">
@@ -139,6 +173,9 @@ const Header = ({ children, hasHiddenAuthButtons, value, onChange}) => {
         </Button>
         </Box>
  )}
+ else{
+  return null;
+ }
 }
 
 export default Header;

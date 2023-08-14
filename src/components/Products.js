@@ -113,7 +113,7 @@ const Products = () => {
   }, [cartData]);
 
   useEffect(() => {
-    if (Object.keys(cartPost).length!=0) {
+     if(Object.keys(cartPost).length!=0){
       if (localStorage.getItem("token")) {
         //console.log(localStorage.getItem("token"))
         let tok = localStorage.getItem("token");
@@ -227,7 +227,7 @@ const Products = () => {
       if (localStorage.getItem("token") != false) {
         let token = localStorage.getItem("token");
         let x = await fetchCart(token);
-        // console.log(x);
+        console.log(x);
         setCartData(x);
       }
     })();
@@ -449,6 +449,7 @@ const Products = () => {
       // let x = await fetchCart(token);
       // console.log("from addtocart-fetchCart bruv", x);
       // setCartData(x);
+      console.log(cartData)
       setCartData((prevItems) =>
       [...prevItems, {productId: productId, qty: qty}]
       )
@@ -489,7 +490,7 @@ const Products = () => {
   if (viewLoading == true) {
     return (
       <div>
-        <Header hasHiddenAuthButtons={false}>
+        <Header hasHiddenAuthButtons={false} hideSearch={false}>
           {/* TODO: CRIO_TASK_MODULE_PRODUCTS - Display search bar in the header for Products page */}
         </Header>
 
@@ -549,6 +550,7 @@ const Products = () => {
           onChange={(e) => {
             debounceSearch(e, debounceTimeout);
           }}
+          hideSearch={false}
         >
           {/* TODO: CRIO_TASK_MODULE_PRODUCTS - Display search bar in the header for Products page */}
         </Header>
@@ -625,6 +627,7 @@ const Products = () => {
           onChange={(e) => {
             debounceSearch(e, debounceTimeout);
           }}
+          hideSearch={false}
         >
           {/* TODO: CRIO_TASK_MODULE_PRODUCTS - Display search bar in the header for Products page */}
         </Header>
