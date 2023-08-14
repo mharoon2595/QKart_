@@ -15,7 +15,8 @@ import React from "react";
 import "./ProductCard.css";
 
 
-const ProductCard = ({ product, handleAddToCart }) => {
+
+const ProductCard = ({ product, onAddtoCart }) => {
   //  //product.map({product)=>{
   //   return(
   //     //product.map({product)=>{
@@ -36,7 +37,7 @@ const ProductCard = ({ product, handleAddToCart }) => {
        </Typography>
        <Rating name="read-only" value={product.rating} readOnly />
       </CardContent>
-        <Button variant="contained">ADD TO CART</Button>
+        <Button variant="contained" onClick={onAddtoCart}  className="card-button">ADD TO CART</Button>
      </Card>
    );
 }
