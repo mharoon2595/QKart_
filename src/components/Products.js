@@ -227,7 +227,7 @@ const Products = () => {
       if (localStorage.getItem("token") != false) {
         let token = localStorage.getItem("token");
         let x = await fetchCart(token);
-        console.log(x);
+        //console.log(x);
         setCartData(x);
       }
     })();
@@ -449,7 +449,7 @@ const Products = () => {
       // let x = await fetchCart(token);
       // console.log("from addtocart-fetchCart bruv", x);
       // setCartData(x);
-      console.log(cartData)
+      //console.log(cartData)
       setCartData((prevItems) =>
       [...prevItems, {productId: productId, qty: qty}]
       )
@@ -608,6 +608,7 @@ const Products = () => {
               items={checkoutList}
               products={productList}
               handleQuantity={addToCart}
+              isReadOnly={false}
             />
           </Grid>
         </Grid>
@@ -685,7 +686,10 @@ const Products = () => {
     </Box> */}
           </Grid>
           <Grid item xs={12} md={3} className="cartGreen">
-            <Cart items={checkoutList} />
+            <Cart items={checkoutList} 
+            products={productList}
+            handleQuantity={addToCart}
+            isReadOnly={false}/>
           </Grid>
         </Grid>
         <Footer />

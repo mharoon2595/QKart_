@@ -14,7 +14,10 @@ const Header = ({ children, hasHiddenAuthButtons, value, onChange, hideSearch}) 
     return (
       <Box className="header">
         <Box className="header-title">
-            <img src="logo_light.svg" alt="QKart-icon"></img>
+            <img src="logo_light.svg" alt="QKart-icon"
+            onClick={()=>{
+              history.push("/",{from:"Header"})
+            }}></img>
         </Box>
         <Box
         sx={{
@@ -69,8 +72,11 @@ const Header = ({ children, hasHiddenAuthButtons, value, onChange, hideSearch}) 
     return( 
       <Box className="header"
       >
-        <Box className="header-title">
-            <img src="logo_light.svg" alt="QKart-icon"></img>
+        <Box className="header-title" >
+            <img src="logo_light.svg" alt="QKart-icon"
+            onClick={()=>{
+              history.push("/",{from:"Header"})
+            }}></img>
         </Box>
         <Box
         sx={{
@@ -125,7 +131,10 @@ else if(hasHiddenAuthButtons===false && hideSearch && localStorage.getItem('user
   return (
     <Box className="header">
       <Box className="header-title">
-          <img src="logo_light.svg" alt="QKart-icon"></img>
+          <img src="logo_light.svg" alt="QKart-icon"
+          onClick={()=>{
+            history.push("/",{from:"Header"})
+          }}></img>
       </Box>
       
       <Box 
@@ -159,7 +168,9 @@ else if(hasHiddenAuthButtons===false && hideSearch && localStorage.getItem('user
   return(
        <Box className="header">
         <Box className="header-title">
-            <img src="logo_light.svg" alt="QKart-icon"></img>
+            <img src="logo_light.svg" alt="QKart-icon" onClick={()=>{
+            history.push("/",{from:"Header"})
+          }}></img>
         </Box>
         <Button
           className="explore-button"

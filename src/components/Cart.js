@@ -50,7 +50,7 @@ import { Fragment } from "react";
  */
 
 export const generateCartItemsFrom = (cartData, productsData) => {
-  console.log(cartData);
+  //console.log(cartData);
   let currentCart;
   let cartList = [];
 
@@ -83,27 +83,51 @@ export const generateCartItemsFrom = (cartData, productsData) => {
  *    Value of all items in the cart
  *
  */
-export const getTotalCartValue = (items) => {
+export const getTotalCartValue = (items = []) => {
   let sum = 0;
   items.forEach((i) => (sum += i.cost * i.qty));
   return sum;
 };
 
+// TODO: CRIO_TASK_MODULE_CHECKOUT - Implement function to return total cart quantity
 /**
- * Component to display the current quantity for a product and + and - buttons to update product quantity on cart
+ * Return the sum of quantities of all products added to the cart
  *
- * @param {Number} value
- *    Current quantity of product in cart
+ * @param { Array.<CartItem> } items
+ *    Array of objects with complete data on products in cart
  *
- * @param {Function} handleAdd
- *    Handler function which adds 1 more of a product to cart
- *
- * @param {Function} handleDelete
- *    Handler function which reduces the quantity of a product in cart by 1
- *
+ * @returns { Number }
+ *    Total quantity of products added to the cart
  *
  */
-const ItemQuantity = ({ value, handleAdd, handleDelete,  }) => {
+export const getTotalItems = (items = []) => {
+  return items.length
+};
+
+// TODO: CRIO_TASK_MODULE_CHECKOUT - Add static quantity view for Checkout page cart
+/**
+ * Component to display the current quantity for a product and + and - buttons to update product quantity on cart
+ * 
+ * @param {Number} value
+ *    Current quantity of product in cart
+ * 
+ * @param {Function} handleAdd
+ *    Handler function which adds 1 more of a product to cart
+ * 
+ * @param {Function} handleDelete
+ *    Handler function which reduces the quantity of a product in cart by 1
+ * 
+ * @param {Boolean} isReadOnly
+ *    If product quantity on cart is to be displayed as read only without the + - options to change quantity
+ * 
+ */
+const ItemQuantity = ({
+  value,
+  handleAdd,
+  handleDelete,
+  isReadOnly
+}) => {
+  if(!isReadOnly){
   return (
     <Stack direction="row" alignItems="center">
       <IconButton size="small" color="primary" onClick={handleDelete}>
@@ -117,25 +141,41 @@ const ItemQuantity = ({ value, handleAdd, handleDelete,  }) => {
       </IconButton>
     </Stack>
   );
+  }
+  else if(isReadOnly){
+    return (
+    <Box padding="0.5rem" data-testid="item-qty">
+        Qty: {value}
+      </Box>
+    )
+  }
 };
 
 /**
  * Component to display the Cart view
- *
+ * 
  * @param { Array.<Product> } products
  *    Array of objects with complete data of all available products
- *
+ * 
  * @param { Array.<Product> } items
  *    Array of objects with complete data on products in cart
- *
- * @param {Function} handleQuantity
+ * 
+ * @param {Function} handleDelete
  *    Current quantity of product in cart
- *
- *
+ * 
+ * @param {Boolean} isReadOnly
+ *    If product quantity on cart is to be displayed as read only without the + - options to change quantity
+ * 
  */
-const Cart = ({ products, items, handleQuantity,a=false, isReadOnly }) => {
+const Cart = ({
+  products,
+  items = [],
+  handleQuantity,
+  a=false,
+  isReadOnly
+}) => {
   const history = useHistory();
-const token = localStorage.getItem("token")
+  const token = localStorage.getItem("token")
   if (!items.length) {
     return (
       <Box className="cart empty">
@@ -151,7 +191,7 @@ const token = localStorage.getItem("token")
     <>
       <Box className="cart">
         {/* TODO: CRIO_TASK_MODULE_CART - Display view for each cart item with non-zero quantity */}
-        {console.log("from cart", items)}
+        {/* {console.log("from cart", items)} */}
         {items.map((stuff) => (
           <Fragment key={stuff._id}>
             <Box display="flex" alignItems="flex-start" padding="1rem">
@@ -191,6 +231,7 @@ const token = localStorage.getItem("token")
                         stuff.qty,
                         false
                       );
+                      
                     }}
                     handleDelete={() => {
                       stuff.qty = stuff.qty - 1;
@@ -203,7 +244,7 @@ const token = localStorage.getItem("token")
                         false
                       );
                     }}
-
+                    isReadOnly={isReadOnly}
                     // Add required props by checking implementation
                   />
                   <Box padding="0.5rem" fontWeight="700">
@@ -233,7 +274,8 @@ const token = localStorage.getItem("token")
             ${getTotalCartValue(items)}
           </Box>
         </Box>
-
+      {isReadOnly==false
+        ?(
         <Box display="flex" justifyContent="flex-end" className="cart-footer">
           <Button
             color="primary"
@@ -247,6 +289,9 @@ const token = localStorage.getItem("token")
             Checkout
           </Button>
         </Box>
+        )
+        :''
+      }
       </Box>
     </>
   );
