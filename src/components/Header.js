@@ -48,10 +48,10 @@ const Header = ({ children, hasHiddenAuthButtons, value, onChange, hideSearch}) 
         //marginX:2
       }}
       >
-        <Box mx={1}>
+        <Box mx={1.5}>
         <img src="avatar.png" alt={localStorage.getItem('username')}></img>
         </Box>
-        <Box mt={0.25}>
+        <Box mt={2} px={1}>
         <p>{localStorage.getItem('username')}</p>
         </Box>
         <Button
@@ -147,7 +147,7 @@ else if(hasHiddenAuthButtons===false && hideSearch && localStorage.getItem('user
       <Box mx={1}>
       <img src="avatar.png" alt={localStorage.getItem('username')}></img>
       </Box>
-      <Box mt={0.25}>
+      <Box mt={2} px={1}>
       <p>{localStorage.getItem('username')}</p>
       </Box>
       <Button

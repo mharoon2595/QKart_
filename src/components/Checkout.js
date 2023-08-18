@@ -470,7 +470,7 @@ const Checkout = () => {
     try{
       localStorage.setItem('balance',(localStorage.getItem('balance')-getTotalCartValue(items)))
        await axios.post(`${config.endpoint}/cart/checkout`,
-      {addressId: addresses.selected},
+      {"addressId": addresses.selected},
     {
     headers: {
       Authorization: `Bearer ${token}`,
